@@ -2,11 +2,8 @@ const functions = require("firebase-functions");
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("./serviceAccountKey.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+admin.initializeApp();
 
 
 exports.signInUser = functions.auth.user().onCreate(user => {
@@ -41,4 +38,14 @@ exports.addRequest = functions.https.onCall((data, context) => {
     text: data.text,
     upvotes: 0,
   })
+  
+})
+
+exports.sendMoney = functions.https.onCall((data, context) => {
+  if(!context.auth){
+    throw new functions.https.HttpsError(
+      'unauthenticated',
+      'Fuck you Niccur'
+    );
+  };
 })
